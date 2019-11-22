@@ -1,30 +1,47 @@
+
+module main
+
 import os
 
 const (
 	sep = "\uE0B0"
 	prompt = "\$"
+	bg_template = "\e[48;5;%dm"
+	fg_template = "\e[38;5;%dm"
 )
 
-
-const (
-	user_bg = 153
-	user_fg = 238
-	cmd_s_bg = 153
-	cmd_s_fg = 238
-	cmd_f_bg = 161
-	cmd_f_fg = 238
-	
-)
+struct Segment {
+	text string
+	bg int
+	fg int
+	mut:
+	ret string
+}
 
 fn add_spacer(t string) string {
 	return " " + t + " "
 }
 
+fn (s mut Segment) spacer() {
+	s.ret = " $s.text "
+}
+
+fn (s mut Segment) color() {
+	ret := malloc(32)
+	C.sprintf(ret, "\e[38;5;%dm\e[48;5;%dm%s\e[m", s.fg, s.bg, s.ret)
+	s.ret = tos(ret, vstrlen(ret))
+}
+
 fn get_user() string{
-	user := os.getenv("USER")
-	user_c := set_color(add_spacer(user), user_bg, user_fg)
-	user_r := user_c + set_fg_color(sep, user_bg)
-	return user_r
+	mut user := &Segment {
+		text: os.getenv("USER")
+		bg: user_bg
+		fg: user_fg
+	}
+
+	user.spacer()
+	user.color()
+	return user.ret
 }
 
 fn get_prompt(exit_code int) string {
@@ -34,24 +51,16 @@ fn get_prompt(exit_code int) string {
 		bg = cmd_f_bg
 		fg = cmd_f_fg
 	}
-	prmpt := set_color(add_spacer("$"), bg, fg)
-	prmpt_r := prmpt+ set_fg_color(sep, bg)
-	return prmpt_r
+	mut prmpt := &Segment {
+		text: prompt
+		bg: bg
+		fg: fg
+	}
+	prmpt.spacer()
+	prmpt.color()
+	return prmpt.ret
 }
 
-fn set_fg_color(s string c int) string {
-	ret := malloc(124)
-	C.sprintf(*char(ret), "\e[38;5;%dm%s\e[m", c, s)
-	return tos(ret, vstrlen(ret)) 
-}
-
-fn set_color(s string bg int fg int) string {
-	ret := malloc(124)
-	// println("bg: " + bg.str())
-	// println("fg: " + fg.str())
-	C.sprintf(*char(ret), "\e[38;5;%dm\e[48;5;%dm%s\e[m", fg, bg, s)
-	return tos(ret, vstrlen(ret)) 
-}
 
 fn main() {
 	argv := os.args
