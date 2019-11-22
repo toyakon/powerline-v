@@ -1,6 +1,6 @@
 NAME := powerline-v
 
-bin/$(NAME): main.v
+bin/$(NAME): main.v theme.v
 	v run . -o $@
 
 build:
