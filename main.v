@@ -5,9 +5,8 @@ import os
 
 const (
 	sep = "\uE0B0"
-	prompt = "\$"
-	bg_template = "\e[48;%dm"
-	fg_template = "\e[38;%dm"
+	sep_ = "\uE0B1"
+	prompt = "\\$"
 )
 
 struct Segment {
@@ -54,13 +53,11 @@ fn (s mut Segment) spacer() {
 }
 
 fn (s mut Segment) color(){
-	ret := malloc(256)
-	if s.bg == 0 {
-		C.sprintf(ret, "\e[38;5;%dm%s\e[m", s.fg, s.seg)
-	} else {
-		C.sprintf(ret, "\e[38;5;%dm\e[48;5;%dm%s\e[m", s.fg, s.bg, s.seg)
+	mut ret := "\\[\\e[38;5;${s.fg.str()}m\\]"
+	if s.bg != 0 {
+		ret = "$ret\\[\\e[48;5;${s.bg.str()}m\\]"
 	}
-	s.seg = tos(ret, vstrlen(ret))
+	s.seg = "$ret${s.seg}\\[\\e[0m\\]"
 }
 
 fn create_segment(s string a Arg)string{
@@ -69,15 +66,21 @@ fn create_segment(s string a Arg)string{
 	user.spacer()
 	user.color()
 
+	mut sp := sep
 	mut sp_bg := 0
+	mut sp_fg := user.bg
 	if a.next_seg != "" {
 		next_seg := segment_list(a.next_seg, a)
 		sp_bg = next_seg.bg
+		if next_seg.bg == user.bg {
+			sp = sep_
+			sp_fg = 244
+		}
 	}
 	
 	mut sprt := &Segment {
-		seg: sep
-		fg: user.bg
+		seg: sp
+		fg: sp_fg
 		bg: sp_bg
 	}	
 
@@ -105,7 +108,7 @@ fn main() {
 		}
 	}
 
-	set := ["user", "cwd", "prompt"]
+	set := ["user", "user", "cwd", "temp", "prompt"]
 	
 	mut line := ""
 	for i, s in set {
@@ -116,5 +119,5 @@ fn main() {
 		}
 		line = line + create_segment(s, arg)
 	}
-	println(line)
+	println("$line ")
 }
