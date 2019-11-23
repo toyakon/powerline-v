@@ -70,6 +70,7 @@ struct Arg {
 mut:
 	prev_exit_code int
 	cwd_depth int
+	short_cwd int
 }
 
 fn main() {
@@ -85,6 +86,9 @@ fn main() {
 		if argv[i] == "-cwd_depth" {
 			i++
 			arg.cwd_depth = argv[i].int()
+		}
+		if argv[i] == "-short_cwd" {
+			arg.short_cwd = 1
 		}
 	}
 
