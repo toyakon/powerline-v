@@ -1,11 +1,11 @@
 NAME := powerline-v
 SRCS = $(wildcard *.v)
 
-bin/$(NAME): $(SRCS)
-	v run . -o $@
+all: $(SRCS)
+	v -o bin/$(NAME) .
 
-test:
-	$(MAKE)
+run:
+	v run . -o $@
 
 build:
 	v build .

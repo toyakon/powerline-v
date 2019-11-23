@@ -68,6 +68,7 @@ fn seg_cwd(arg Arg)Segment{
 	} else {
 		long_cwd
 	}
+	
 	return Segment {
 		name: "cwd"
 		content: cwd(arg.cwd_depth)

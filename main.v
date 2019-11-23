@@ -7,32 +7,6 @@ const (
 	prompt = "\\$"
 )
 
-fn segment_list(s string a Arg)string{
-
-	if s == "user" {
-		return get_user()
-	}
-
-	// if s == "cwd" {
-	// 	return seg_cwd()
-	// }
-
-	if s == "prompt" {
-		return prompt
-	}	
-
-	return "seg_cwd"
-}
-
-fn get_prmpt_color(exit_code int) int{
-	bg := if exit_code != 0 {
-		cmd_f_bg
-	} else {
-		cmd_s_bg
-	}
-	return bg
-}
-
 
 fn get_user() string {
 	return os.getenv("USER")
@@ -48,6 +22,7 @@ fn seg_user(arg Arg)Segment{
 }
 
 fn seg_prompt(arg Arg)Segment{
+	// println(arg.prev_exit_code)
 	bg := if arg.prev_exit_code != 0 {
 		cmd_f_bg
 	} else {
@@ -59,11 +34,6 @@ fn seg_prompt(arg Arg)Segment{
 		bg: bg
 		fg: cmd_s_fg
 	}
-}
-
-fn create_segment(s string a Arg next string)string{
-	ret := segment_list(s, a)
-	return ret
 }
 
 struct Arg {
@@ -82,6 +52,7 @@ fn main() {
 		if argv[i] == "-err" {
 			i++
 			arg.prev_exit_code = argv[i].int()
+
 		}
 		if argv[i] == "-cwd_depth" {
 			i++
@@ -91,7 +62,6 @@ fn main() {
 			arg.short_cwd = 1
 		}
 	}
-
 	mut user := seg_user(arg)
 	mut cwd := seg_cwd(arg)
 	mut prompt := seg_prompt(arg)
