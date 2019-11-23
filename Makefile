@@ -1,7 +1,11 @@
 NAME := powerline-v
+SRCS = $(wildcard *.v)
 
-bin/$(NAME): main.v theme.v
+bin/$(NAME): $(SRCS)
 	v run . -o $@
+
+test:
+	$(MAKE)
 
 build:
 	v build .
