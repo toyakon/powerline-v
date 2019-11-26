@@ -61,7 +61,6 @@ fn get_cwd(depth int) []string {
 	return ret
 }
 
-
 fn seg_cwd(arg Arg)Segment{
 	cwd := if arg.short_cwd == 1 {
 		short_cwd
