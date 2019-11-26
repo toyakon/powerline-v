@@ -49,16 +49,21 @@ fn main() {
 	mut user := seg_user(arg)
 	mut cwd := seg_cwd(arg)
 	mut prompt := seg_prompt(arg)
+	mut git := seg_git_branch(arg)
 
-	user.next_bg = cwd.bg
-	cwd.next_bg = prompt.bg
+	user.next_bg = if cwd.content.len != 0 { cwd.bg } else { 0 }
+	cwd.next_bg = if git.content.len != 0 { git.bg } else { prompt.bg }
+	git.next_bg = if prompt.content.len != 0 { prompt.bg } else { 0 }
+
 	user.create()
 	cwd.create()
+	git.create()
 	prompt.create()
 
 	mut line := ""
 	line += user.content
 	line += cwd.content
+	line += git.content
 	line += prompt.content
 	println("$line ")
 	

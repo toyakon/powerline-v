@@ -14,4 +14,8 @@ const (
 
 	cwd_bg = 237
 	cwd_fg = 254 
+
+	git_master_bg = 206
+	git_branch_bg = 153
+	git_branch_fg = 238
 )

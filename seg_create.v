@@ -36,6 +36,10 @@ fn (s mut Segment) color(){
 }
 
 fn (s mut Segment) create() {
+	if s.content.len == 0 {
+		bg: 0
+		return
+	}
 	s.spacer()
 	s.color()
 
