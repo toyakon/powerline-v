@@ -31,3 +31,7 @@ fi
 - short_cwd
     - 指定すると現在位置以外頭文字だけで表示する
 
+```
+PS1="$(powerline-v -err $? -cwd_depth 1 -short_cwd)"
+
+```

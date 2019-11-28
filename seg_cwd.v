@@ -30,15 +30,11 @@ fn short_cwd(depth int) string{
 	mut ret := ""
 	
 	for i, c in cwd {
-		if i == cwd.len-1 {
+        if i == 0 {
+            ret = c
+        } else if i == cwd.len-1 {
 			ret = "$ret $c"
-		} else if i == 0 {
-			ret = if cwd.len == 2 {
-				c
-			} else {
-				c[0].str()
-			}
-		} else {
+        } else {
 			ret = "$ret " + c[0].str()
 		}
 		if i != cwd.len-1 {
