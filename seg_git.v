@@ -35,7 +35,20 @@ fn seg_git_branch(arg Arg) Segment {
 	}
 }
 
-// fn main() {
-// 	println("----------------------------")
-// 	println(get_current_branch())
-// }
+fn get_git_user() string {
+    usr := os.exec("git config user.name") or { return "" }
+    if usr.exit_code != 0 {
+        return ""
+    }
+    return usr.output
+}
+
+fn seg_git_user(arg Arg) Segment {
+    usr := get_git_user()
+    return Segment {
+        name: "git_user"
+        content: usr
+        bg: user_bg
+        fg: user_fg
+    }
+}

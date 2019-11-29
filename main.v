@@ -42,7 +42,7 @@ fn main() {
         short_cwd: if args.get("--short_cwd") == "true" { 1 } else { 0 }
     }
 
-	mut user := seg_user(arg)
+	mut user := seg_git_user(arg)
 	mut cwd := seg_cwd(arg)
 	mut prompt := seg_prompt(arg)
 	mut git := seg_git_branch(arg)
