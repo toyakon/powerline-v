@@ -1,7 +1,7 @@
 
 module main
 
-import os
+import toyakon.vargparse
 
 const (
 	prompt = "\\$"
@@ -29,22 +29,18 @@ mut:
 }
 
 fn main() {
-	argv := os.args
-	argc := argv.len
-	mut arg := Arg{}
-	for i := 0; i<argc;i++ {
-		if argv[i] == "-err" {
-			i++
-			arg.prev_exit_code = argv[i].int()
-		}
-		if argv[i] == "-cwd_depth" {
-			i++
-			arg.cwd_depth = argv[i].int()
-		}
-		if argv[i] == "-short_cwd" {
-			arg.short_cwd = 1
-		}
-	}
+    mut args := vargparse.parser()
+
+    args.add_argument("--err:")
+    args.add_argument("--short_cwd")
+    args.add_argument("--cwd_depth:")
+
+    args.parse()
+    arg := Arg{
+        prev_exit_code: args.get("--err").int()
+        cwd_depth: args.get("--cwd_depth").int()
+        short_cwd: if args.get("--short_cwd") == "true" { 1 } else { 0 }
+    }
 
 	mut user := seg_user(arg)
 	mut cwd := seg_cwd(arg)
