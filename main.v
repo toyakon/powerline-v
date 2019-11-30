@@ -31,15 +31,15 @@ mut:
 fn main() {
     mut args := vargparse.parser()
 
-    args.add_argument("--err:")
-    args.add_argument("--short_cwd")
-    args.add_argument("--cwd_depth:")
+    args.add_argument("-err:")
+    args.add_argument("-short_cwd")
+    args.add_argument("-cwd_depth:")
 
     args.parse()
     arg := Arg{
-        prev_exit_code: args.get("--err").int()
-        cwd_depth: args.get("--cwd_depth").int()
-        short_cwd: if args.get("--short_cwd") == "true" { 1 } else { 0 }
+        prev_exit_code: args.get("-err").int()
+        cwd_depth: args.get("-cwd_depth").int()
+        short_cwd: if args.get("-short_cwd") == "true" { 1 } else { 0 }
     }
 
 	mut user := seg_git_user(arg)
