@@ -2,22 +2,14 @@ module main
 
 import os
 
-fn get_current_branch() string {
-    ret := os.exec("git branch") or {
-        return ""
+fn exec_git_cmd(arg string) string{
+    ret := os.exec(arg) or { panic(err) }
+
+    return if ret.exit_code != 0 {
+        ""
+    } else {
+        ret.output
     }
-    if ret.exit_code != 0 {
-        return ""
-    }
-    branches := ret.output.split("\n")
-    mut current := ""
-    for b in branches {
-        if b.starts_with("*") {
-            current = b.replace("*", "").trim_space()
-            break
-        }
-    }
-    return current
 }
 
 fn get_status() string {
@@ -26,15 +18,6 @@ fn get_status() string {
         return ""
     }
     status := ret.output.split("\n")
-    branch := status[0].trim("#").trim_space()
-
-    tbranch := if branch.contains("...") {
-        branch[..branch.index(".")]
-    } else {
-        branch
-    }
-
-    mut stat := "$tbranch"
 
     file := status[1..]
 
@@ -57,61 +40,52 @@ fn get_status() string {
         }
     }
 
+    mut stat := ""
+
     if staged != 0 {
-        stat = "$stat $sep_ $staged✓"
+        mut s := Segment {
+            content: staged.str()
+            bg: cmd_s_bg
+            fg: cmd_s_fg
+            next_bg: cmd_f_bg
+        }
+        s.create()
+        stat = "$stat$s.content"
     }
 
     if not_staged != 0 {
-        stat = "$stat $sep_ $not_staged✏"
+        mut ns := Segment {
+            content: not_staged.str()
+            bg: cmd_f_bg
+            fg: cmd_f_fg
+            next_bg: cmd_s_bg
+        }
+        ns.create()
+        stat = "$stat$ns.content"
     }
 
     if untracked != 0 {
-        stat = "$stat $sep_ $untracked+"
+        mut ut := Segment {
+            content: untracked.str()
+            bg: cmd_s_bg
+            fg: cmd_s_fg
+        }
+        ut.create()
+        stat = "$stat$ut.content"
     }
 
     return stat
 
 }
 
-fn seg_git_branch(arg Arg) Segment {
-    br := get_status()
-    return Segment {
-        name: "git_branch"
-        content: br
+
+fn seg_git_status(arg Arg) Segment {
+    br := Segment {
+        content: get_status()
         bg: git_master_bg
         fg: git_branch_fg
     }
+
+    return br
 }
 
-fn seg_git_branch2(arg Arg) Segment {
-    br := get_current_branch()
-    clr := if br == "master" {
-        git_master_bg
-    } else {
-        git_branch_bg
-    }
-    return Segment {
-        name: "git_branch"
-        content: br
-        bg: clr
-        fg: git_branch_fg
-    }
-}
-
-fn get_git_user() string {
-    usr := os.exec("git config user.name") or { return "" }
-    if usr.exit_code != 0 {
-        return ""
-    }
-    return usr.output
-}
-
-fn seg_git_user(arg Arg) Segment {
-    usr := get_git_user()
-    return Segment {
-        name: "git_user"
-        content: usr
-        bg: user_bg
-        fg: user_fg
-    }
-}
