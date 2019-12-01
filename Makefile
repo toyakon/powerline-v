@@ -10,7 +10,7 @@ run:
 build:
 	v build .
 
-install:
+install: ./bin/$(NAME)
 	cp ./bin/$(NAME) ~/.local/bin/$(NAME)
 
 .PHONY: clean

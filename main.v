@@ -4,28 +4,29 @@ module main
 import toyakon.vargparse
 
 const (
-	prompt = "\\$"
+    prompt = "\\$"
 )
 
 fn seg_prompt(arg Arg)Segment{
-	bg := if arg.prev_exit_code != 0 {
-		cmd_f_bg
-	} else {
-		cmd_s_bg
-	}
-	return Segment {
-		name: "prompt"
-		content: prompt
-		bg: bg
-		fg: cmd_s_fg
-	}
+    bg := if arg.prev_exit_code != 0 {
+        cmd_f_bg
+    } else {
+        cmd_s_bg
+    }
+    return Segment {
+        name: "prompt"
+        content: prompt
+        space: true
+        bg: bg
+        fg: cmd_s_fg
+    }
 }
 
 struct Arg {
-mut:
-	prev_exit_code int
-	cwd_depth int
-	short_cwd int
+    mut:
+    prev_exit_code int
+    cwd_depth int
+    short_cwd int
 }
 
 fn main() {
@@ -42,23 +43,35 @@ fn main() {
         short_cwd: if args.get("-short_cwd") == "true" { 1 } else { 0 }
     }
 
-	mut user := seg_git_user(arg)
-	mut cwd := seg_cwd(arg)
-	mut prompt := seg_prompt(arg)
-	mut git := seg_git_branch(arg)
-	mut gs := seg_git_status(arg)
+    user := seg_git_user(arg)
+    cwd := seg_cwd(arg)
+    prompt := seg_prompt(arg)
+    git := seg_git(arg)
+    powerline := [user, cwd, git, prompt]
 
-	user.next_bg = if cwd.content.len != 0 { cwd.bg } else { 0 }
-	cwd.next_bg = if git.content.len != 0 { git.bg } else { prompt.bg }
-	git.next_bg = if gs.content.len != 0 { gs.bg } else { 0 }
-	gs.next_bg = if prompt.content.len != 0 { prompt.bg } else { 0 }
+    mut line := ""
+    mut next := 0
+    mut prev := 0
 
-	mut line := ""
-	line += user.view()
-	line += cwd.view()
-	line += git.view()
-	line += gs.view()
-	line += prompt.view()
-	println("$line ")
-	
+    for i, pl in powerline {
+        if pl.content == "" {
+            continue
+        }
+
+        line += pl.view()
+        if i != powerline.len-1 {
+            prev = if powerline[i+1].content == "" {
+                powerline[(i+2)%powerline.len].bg
+            } else {
+                powerline[i+1].bg
+            }
+            next = if pl.next != 0 { pl.next } else { pl.bg }
+            line += separator(prev, next)
+        } else {
+            line += separator(0, pl.bg)
+        }
+    }
+
+    println("$line ")
+
 }
