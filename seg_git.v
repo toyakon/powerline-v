@@ -2,40 +2,29 @@ module main
 
 import os
 
-fn get_current_branch() string {
-	ret := os.exec("git branch") or {
-		return ""
-	}
-	if ret.exit_code != 0 {
-		return ""
-	}
-	branches := ret.output.split("\n")
-	mut current := ""
-	for b in branches {
-		if b.starts_with("*") {
-			current = b.replace("*", "").trim_space()
-			break
-		}
-	}
-	return current
+fn exec_git_cmd(arg string) string{
+    ret := os.exec(arg) or { panic(err) }
+
+    return if ret.exit_code != 0 {
+        ""
+    } else {
+        ret.output
+    }
 }
 
-fn seg_git_branch(arg Arg) Segment {
-	br := get_current_branch()
-	clr := if br == "master" {
-		git_master_bg
-	} else {
-		git_branch_bg
-	}
-	return Segment {
-		name: "git_branch"
-		content: br
-		bg: clr
-		fg: git_branch_fg
-	}
+fn seg_git(arg Arg) Segment {
+    stat := seg_git_status(arg)
+    branch := seg_git_branch(arg)
+    mut content := ""
+    if branch.content != "" {
+        content += branch.view()
+    }
+    if stat.content != ""{
+        content += separator(stat.bg, branch.bg) +  stat.view()
+    }
+    return Segment {
+        content: content
+        bg: branch.bg
+        next: stat.next
+    }
 }
-
-// fn main() {
-// 	println("----------------------------")
-// 	println(get_current_branch())
-// }

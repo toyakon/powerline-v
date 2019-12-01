@@ -67,6 +67,7 @@ fn seg_cwd(arg Arg)Segment{
 	return Segment {
 		name: "cwd"
 		content: cwd(arg.cwd_depth)
+        space: true
 		bg: cwd_bg
 		fg: cwd_fg
 	}
