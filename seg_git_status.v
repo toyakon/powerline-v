@@ -11,7 +11,9 @@ fn get_status() []int {
 
     mut ahead := 0
     if status[0].contains("ahead") {
-        ahead++
+        mut ah := status[0].all_after("ahead ")
+        ah = ah.trim("]")
+        ahead = ah.int()
     }
 
     file := status[1..]
