@@ -24,7 +24,7 @@ fn seg_git(arg Arg) Segment {
     }
     return Segment {
         content: content
-        bg: branch.bg
+        bg: theme.git_branch_bg
         next: stat.next
     }
 }

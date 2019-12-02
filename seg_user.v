@@ -5,7 +5,7 @@ fn seg_user(arg Arg)Segment{
         name: "user"
         content: "\\u"
         space: true
-        bg: user_bg
-        fg: user_fg
+        bg: theme.user_bg
+        fg: theme.user_fg
     }
 }

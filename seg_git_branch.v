@@ -22,7 +22,7 @@ fn seg_git_branch(arg Arg) Segment {
         name: "git_branch"
         content: get_branch()
         space: true
-        bg: git_master_bg
-        fg: git_branch_fg
+        bg: theme.git_branch_bg
+        fg: theme.git_branch_fg
     }
 }

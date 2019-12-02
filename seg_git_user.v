@@ -11,7 +11,7 @@ fn seg_git_user(arg Arg) Segment {
         name: "git_user"
         content: get_git_user()
         space: true
-        bg: user_bg
-        fg: user_fg
+        bg: theme.user_bg
+        fg: theme.user_fg
     }
 }
