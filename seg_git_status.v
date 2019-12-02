@@ -108,6 +108,7 @@ fn seg_git_status(arg Arg) Segment {
         } else {
             sg.bg
         }
+        prev = sg.bg
     }
 
     if status[3] != 0 {
