@@ -14,6 +14,7 @@ struct Segment {
 
 const (
     sep = "\uE0B0"
+    sep_thin = "\uE0B1"
     sep_ = "\uE0B1"
 )
 
@@ -26,6 +27,10 @@ fn set_color(content string bg, fg int)string {
 
 fn separator(bg, fg int)string {
     return set_color(sep, bg, fg)
+}
+
+fn separator_thin(bg, fg int)string {
+    return set_color(sep_thin, bg, fg)
 }
 
 fn (s Segment) view()string{
