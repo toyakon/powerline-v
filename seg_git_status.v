@@ -47,15 +47,15 @@ fn seg_git_status(arg Arg) Segment {
         sg := Segment {
             content: status[0].str()
             space: true
-            bg: staged_bg
-            fg: staged_fg
+            bg: theme.git_staged_bg
+            fg: theme.git_staged_fg
         }
         first = if first == 0 { sg.bg } else { first }
         stat += sg.view()
         next = if status[1] != 0 {
-            unstaged_bg
+            theme.git_unstaged_bg
         } else if status[2] != 0 {
-            untracked_bg
+            theme.git_untracked_bg
         } else {
             sg.bg
         }
@@ -70,13 +70,13 @@ fn seg_git_status(arg Arg) Segment {
         sg := Segment {
             content: status[1].str()
             space: true
-            bg: unstaged_bg
-            fg: unstaged_fg
+            bg: theme.git_unstaged_bg
+            fg: theme.git_unstaged_fg
         }
         first = if first == 0 { sg.bg } else { first }
         stat += sg.view()
         next = if status[2] != 0 {
-            untracked_bg
+            theme.git_untracked_bg
         } else {
             sg.bg
         }
@@ -90,8 +90,8 @@ fn seg_git_status(arg Arg) Segment {
         sg := Segment {
             content: status[2].str()
             space: true
-            bg: untracked_bg
-            fg: untracked_fg
+            bg: theme.git_untracked_bg
+            fg: theme.git_untracked_fg
         }
         first = if first == 0 { sg.bg } else { first }
         stat += sg.view()

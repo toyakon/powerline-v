@@ -8,17 +8,20 @@ const (
 )
 
 fn seg_prompt(arg Arg)Segment{
-    bg := if arg.prev_exit_code != 0 {
-        cmd_f_bg
-    } else {
-        cmd_s_bg
+    mut bg := theme.cmd_s_bg
+    mut fg := theme.cmd_s_fg
+
+    if arg.prev_exit_code != 0 {
+        bg = theme.cmd_f_bg
+        fg = theme.cmd_f_fg
     }
+
     return Segment {
         name: "prompt"
         content: prompt
         space: true
         bg: bg
-        fg: cmd_s_fg
+        fg: fg
     }
 }
 
