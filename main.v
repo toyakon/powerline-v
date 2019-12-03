@@ -26,6 +26,7 @@ fn seg_prompt(arg Arg)Segment{
 }
 
 struct Arg {
+    ppid string
     mut:
     prev_exit_code int
     cwd_depth int
@@ -35,12 +36,14 @@ struct Arg {
 fn main() {
     mut args := vargparse.parser()
 
+    args.add_argument("-ppid:")
     args.add_argument("-err:")
     args.add_argument("-short_cwd")
     args.add_argument("-cwd_depth:")
 
     args.parse()
     arg := Arg{
+        ppid: args.get("-ppid")
         prev_exit_code: args.get("-err").int()
         cwd_depth: args.get("-cwd_depth").int()
         short_cwd: if args.get("-short_cwd") == "true" { 1 } else { 0 }
@@ -50,7 +53,8 @@ fn main() {
     cwd := seg_cwd(arg)
     prompt := seg_prompt(arg)
     git := seg_git(arg)
-    powerline := [user, cwd, git, prompt]
+    job := seg_job(arg)
+    powerline := [user, cwd, git, job, prompt]
 
     mut line := ""
     mut next := 0

@@ -10,6 +10,9 @@ run:
 build:
 	v build .
 
+./bin/$(NAME): $(SRCS)
+	$(MAKE)
+
 install: ./bin/$(NAME)
 	cp ./bin/$(NAME) ~/.local/bin/$(NAME)
 
