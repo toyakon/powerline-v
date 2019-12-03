@@ -127,6 +127,7 @@ fn seg_git_status(arg Arg) Segment {
     }
 
     return Segment {
+        name: "git_status"
         content: stat
         bg: first
         next: next

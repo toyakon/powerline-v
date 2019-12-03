@@ -1,20 +1,18 @@
 # powerline-v
-なんちゃってPowerline
-
-いまのとこBashのみ
+nanchatte powerline.
+bash powerline for vlang.
 
 # Install
-1. vlangをインストール ([vlang/v](https://github.com/vlang/v))
-2. cloneしてcdしてmake
+1. install vlang ([vlang/v](https://github.com/vlang/v))
+2. clone this repository.
 
 ```
 git clone https://github.com/toyakon/powerline-v
 cd powerline-v
-make
 make install
 ```
 
-3. .bashrcに追記
+3. Added to .bashrc
 ```
 function _update_ps1() {
     PS1="$(powerline-v -err $?)"
@@ -27,11 +25,13 @@ fi
 
 # Option
 - cwd_depth int
-    - cwdで表示する数。0でフルパスを表示。初期値0
+    - view cwd depth int 
 - short_cwd
-    - 指定すると現在位置以外頭文字だけで表示する
+    - It will be displayed in initials except the current directory.
+- ppid
+    - Pass the PPID of the bash being executed. This is necessary to use the job segment.
 
 ```
-PS1="$(powerline-v -err $? -cwd_depth 1 -short_cwd)"
+PS1="$(powerline-v -ppid $$ -err $? -cwd_depth 1 -short_cwd)"
 
 ```
