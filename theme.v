@@ -11,6 +11,9 @@ struct Theme {
     cwd_bg int
     cwd_fg int
 
+    job_bg int
+    job_fg int
+
     git_master_bg int
     git_master_fg int
     git_branch_bg int
@@ -40,9 +43,11 @@ const (
         user_fg: 238
         cwd_bg: 237
         cwd_fg: 255
+        job_bg: 237
+        job_fg: 220
         git_master_bg: 75
         git_master_fg: 238
-        git_branch_bg: 65
+        git_branch_bg: 72
         git_branch_fg: 238
         git_staged_bg: 120
         git_staged_fg: 238
@@ -52,9 +57,9 @@ const (
         git_untracked_fg: 255
         git_ahead_bg: 237
         git_ahead_fg: 255
-        cmd_s_bg: 77
+        cmd_s_bg: 111
         cmd_s_fg: 238
-        cmd_f_bg: 126
+        cmd_f_bg: 160
         cmd_f_fg: 238
     }
 )
