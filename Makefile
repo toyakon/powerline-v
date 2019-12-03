@@ -14,7 +14,7 @@ build:
 	$(MAKE)
 
 install: ./bin/$(NAME)
-	cp ./bin/$(NAME) ~/.local/bin/$(NAME)
+	sudo cp ./bin/$(NAME) /usr/local/bin/$(NAME)
 
 .PHONY: clean
 clean:

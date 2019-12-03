@@ -50,12 +50,13 @@ fn main() {
     }
 
     user := seg_git_user(arg)
+    ssh := seg_ssh(arg)
     cwd := seg_cwd(arg)
     prompt := seg_prompt(arg)
     git := seg_git(arg)
     job := seg_job(arg)
 
-    powerline := [user, cwd, git, job, prompt]
+    powerline := [user, ssh, cwd, git, job, prompt]
 
     mut powerline_view := []Segment
 
