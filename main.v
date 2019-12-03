@@ -50,6 +50,7 @@ fn main() {
     }
 
     user := seg_git_user(arg)
+    host := seg_hostname(arg)
     ssh := seg_ssh(arg)
     cwd := seg_cwd(arg)
     prompt := seg_prompt(arg)

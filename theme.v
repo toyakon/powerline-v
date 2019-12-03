@@ -7,6 +7,8 @@ struct Theme {
 
     user_bg int
     user_fg int
+    hostname_bg int
+    hostname_fg int
 
     ssh_bg int
     ssh_fg int
@@ -44,6 +46,8 @@ const (
         default_fg: 255
         user_bg: 153
         user_fg: 238
+        hostname_bg: 220
+        hostname_fg: 238
         ssh_bg: 112
         ssh_fg: 238
         cwd_bg: 237
