@@ -50,12 +50,14 @@ fn main() {
     }
 
     user := seg_git_user(arg)
+    host := seg_hostname(arg)
+    ssh := seg_ssh(arg)
     cwd := seg_cwd(arg)
     prompt := seg_prompt(arg)
     git := seg_git(arg)
     job := seg_job(arg)
 
-    powerline := [user, cwd, git, job, prompt]
+    powerline := [user, ssh, cwd, git, job, prompt]
 
     mut powerline_view := []Segment
 
@@ -75,7 +77,11 @@ fn main() {
         if i != powerline_view.len-1 {
             prev = powerline_view[i+1].bg
             next = if pl.next != 0 { pl.next } else { pl.bg }
-            line += separator(prev, next)
+            line += if prev == pl.bg {
+                    separator_thin(prev, theme.default_fg)
+                } else { 
+                    separator(prev, next)
+                }
         } else {
             line += separator(0, pl.bg)
         }

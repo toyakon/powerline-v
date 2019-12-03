@@ -4,7 +4,8 @@ bash powerline for vlang.
 
 # Install
 1. install vlang ([vlang/v](https://github.com/vlang/v))
-2. clone this repository.
+2. install vargparse ([toyakon/argparse-v](https://github.com/toyakon/argparse-v))
+3. clone this repository.
 
 ```
 git clone https://github.com/toyakon/powerline-v
@@ -12,7 +13,7 @@ cd powerline-v
 make install
 ```
 
-3. Added to .bashrc
+4. Added to .bashrc
 ```
 function _update_ps1() {
     PS1="$(powerline-v -err $?)"
