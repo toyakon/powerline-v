@@ -54,24 +54,26 @@ fn main() {
     prompt := seg_prompt(arg)
     git := seg_git(arg)
     job := seg_job(arg)
+
     powerline := [user, cwd, git, job, prompt]
+
+    mut powerline_view := []Segment
+
+    for pl in powerline {
+        if pl.content != "" {
+            powerline_view << pl
+        }
+    }
 
     mut line := ""
     mut next := 0
     mut prev := 0
 
-    for i, pl in powerline {
-        if pl.content == "" {
-            continue
-        }
-
+    for i, pl in powerline_view {
+        
         line += pl.view()
-        if i != powerline.len-1 {
-            prev = if powerline[i+1].content == "" {
-                powerline[(i+2)%powerline.len].bg
-            } else {
-                powerline[i+1].bg
-            }
+        if i != powerline_view.len-1 {
+            prev = powerline_view[i+1].bg
             next = if pl.next != 0 { pl.next } else { pl.bg }
             line += separator(prev, next)
         } else {

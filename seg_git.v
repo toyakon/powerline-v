@@ -23,6 +23,7 @@ fn seg_git(arg Arg) Segment {
         content += separator(stat.bg, branch.bg) +  stat.view()
     }
     return Segment {
+        name: "git"
         content: content
         bg: theme.git_branch_bg
         next: stat.next
