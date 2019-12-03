@@ -9,7 +9,6 @@ struct Theme {
     user_fg int
     hostname_bg int
     hostname_fg int
-
     ssh_bg int
     ssh_fg int
 

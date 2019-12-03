@@ -72,16 +72,16 @@ fn main() {
     mut prev := 0
 
     for i, pl in powerline_view {
-        
+
         line += pl.view()
         if i != powerline_view.len-1 {
             prev = powerline_view[i+1].bg
             next = if pl.next != 0 { pl.next } else { pl.bg }
             line += if prev == pl.bg {
-                    separator_thin(prev, theme.default_fg)
-                } else { 
-                    separator(prev, next)
-                }
+                separator_thin(prev, theme.default_fg)
+            } else {
+                separator(prev, next)
+            }
         } else {
             line += separator(0, pl.bg)
         }
