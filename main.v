@@ -49,39 +49,50 @@ fn main() {
         short_cwd: if args.get("-short_cwd") == "true" { 1 } else { 0 }
     }
 
-    user := seg_git_user(arg)
-    host := seg_hostname(arg)
-    ssh := seg_ssh(arg)
-    cwd := seg_cwd(arg)
-    prompt := seg_prompt(arg)
-    git := seg_git(arg)
-    job := seg_job(arg)
+    user_format := args.get_etc()
+    powerline_format := if user_format.len != 0 {
+        user_format
+    } else {
+        ["user", "host", "ssh", "cwd", "git", "job"]
+    }
 
-    powerline := [user, ssh, cwd, git, job, prompt]
+    segment_list := {
+        "user": seg_user(arg)
+        "guser" : seg_git_user(arg)
+        "host" : seg_hostname(arg)
+        "ssh" : seg_ssh(arg)
+        "cwd" : seg_cwd(arg)
+        "prompt" : seg_prompt(arg)
+        "git" : seg_git(arg)
+        "job" : seg_job(arg)
+    }
 
-    mut powerline_view := []Segment
-
-    for pl in powerline {
-        if pl.content != "" {
-            powerline_view << pl
+    mut powerline := []Segment
+    for pf in powerline_format {
+        if pf in segment_list {
+            if segment_list[pf].content != "" {
+                powerline << segment_list[pf]
+            }
         }
     }
+
+    powerline << segment_list["prompt"]
 
     mut line := ""
     mut next := 0
     mut prev := 0
 
-    for i, pl in powerline_view {
-        
+    for i, pl in powerline {
+
         line += pl.view()
-        if i != powerline_view.len-1 {
-            prev = powerline_view[i+1].bg
+        if i != powerline.len-1 {
+            prev = powerline[i+1].bg
             next = if pl.next != 0 { pl.next } else { pl.bg }
             line += if prev == pl.bg {
-                    separator_thin(prev, theme.default_fg)
-                } else { 
-                    separator(prev, next)
-                }
+                separator_thin(prev, theme.default_fg)
+            } else {
+                separator(prev, next)
+            }
         } else {
             line += separator(0, pl.bg)
         }

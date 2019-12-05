@@ -16,15 +16,46 @@ make install
 4. Added to .bashrc
 ```
 function _update_ps1() {
-    PS1="$(powerline-v -err $?)"
+    PS1="$(powerline-v -ppid $$ -err $?)"
 }
 
 if [ "$TERM" != "linux" ]; then
     PROMPT_COMMAND=_update_ps1
 fi
 ```
+# View Settings
+- user
+    - user name (Light Blue)
+- host
+    - host name (yellow)
+- ssh 
+    - The ssh segment displayed when ssh is connected (Green)
+- cwd
+    - current working directory is displayed (Gray)
+- git
+    - git status is displayed. hide if status is 0
+    - branch(Dark green) > ahead(Gray) > staged(Green) > not staged(Pink) > untracked(Red)
+- job
+    - Jub running in current process
+- guser
+    - git user neme
+
+If not specified, it is equivalent to
+```
+PS1="$(powerline-v -ppid $$ -err $? user host ssh cwd git job)"
+```
+
+## example
+```
+PS1="$(powerline-v -ppid $$ -err $? ssh guser cwd git job)"
+```
+```
+PS1="$(powerline-v -ppid $$ -err $? user git)"
+```
 
 # Option
+If used, write before view setting.
+
 - cwd_depth int
     - view cwd depth int 
 - short_cwd
