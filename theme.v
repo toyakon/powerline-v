@@ -31,6 +31,10 @@ struct Theme {
     git_untracked_fg int
     git_ahead_bg int
     git_ahead_fg int
+    git_conflicted_bg int
+    git_conflicted_fg int
+    git_stash_bg int
+    git_stash_fg int
 
     cmd_s_bg int
     cmd_s_fg int
@@ -65,6 +69,10 @@ const (
         git_untracked_fg: 255
         git_ahead_bg: 237
         git_ahead_fg: 255
+        git_conflicted_bg: 198
+        git_conflicted_fg: 255
+        git_stash_bg: 20
+        git_stash_fg: 255
         cmd_s_bg: 111
         cmd_s_fg: 238
         cmd_f_bg: 160

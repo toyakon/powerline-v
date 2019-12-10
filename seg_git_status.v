@@ -2,133 +2,122 @@
 
 module main
 
-fn get_status() []int {
+fn get_ahead(status string) int {
+    if status.contains("ahead") {
+        mut ah := status.all_after("ahead ")
+        ah =  ah.trim("]")
+        return ah.int()
+    } else {
+        return 0
+    }
+}
+
+fn get_stash() int {
+    ret := exec_git_cmd("git stash list")
+    stash := ret.split("\n")
+    return stash.len
+}
+
+fn get_status() map[string]int {
     ret := exec_git_cmd("git status -sb --ignore-submodules")
     status := ret.split("\n")
+    mut git_stat := {
+        "ahead": 0
+        "staged": 0
+        "unstaged": 0
+        "untracked": 0
+        "conflicted": 0
+        "stash": 0
+    }
+
     if status.len == 0 {
-        return [0,0,0,0]
+        return git_stat
     }
 
-    mut ahead := 0
-    if status[0].contains("ahead") {
-        mut ah := status[0].all_after("ahead ")
-        ah = ah.trim("]")
-        ahead = ah.int()
-    }
-
-    file := status[1..]
-
-    mut staged := 0
-    mut not_staged := 0
-    mut untracked := 0
-
-    if file.len != 0  {
-        for f in file {
-            if f.contains("??") {
-                untracked++
+    git_stat["ahead"] = get_ahead(status[0])
+    git_stat["stash"] = get_stash()
+    files := status[1..]
+    for f in files {
+        st := f[..2]
+        match st {
+            "??" {
+                git_stat["untracked"] = git_stat["untracked"] + 1
             }
-            if f[0].str() == " " {
-                not_staged++
+            "DD", "AU", "UA", "DU", "AA", "UU" {
+                git_stat["conflicted"] =  git_stat["conflicted"] + 1
             }
-            if f[1].str() == " " {
-                staged++
+            else {
+                if st[0].str() == " " {
+                    git_stat["unstaged"] = git_stat["unstaged"] + 1
+                }
+                if st[1].str() == " " {
+                    git_stat["staged"] = git_stat["staged"] + 1
+                }
             }
         }
     }
-
-    return [ahead, staged, not_staged, untracked]
+    return git_stat
 }
 
 fn seg_git_status(arg Arg) Segment {
     status := get_status()
+    git_colors := {
+        "ahead_bg": theme.git_ahead_bg,
+        "ahead_fg": theme.git_ahead_fg,
+        "staged_bg": theme.git_staged_bg,
+        "staged_fg": theme.git_staged_fg,
+        "unstaged_bg": theme.git_unstaged_bg,
+        "unstaged_fg": theme.git_unstaged_fg,
+        "untracked_bg": theme.git_untracked_bg,
+        "untracked_bfg": theme.git_untracked_fg,
+        "conflicted_bg": theme.git_conflicted_bg,
+        "conflicted_fg": theme.git_conflicted_fg,
+        "stash_bg": theme.git_stash_bg,
+        "stash_fg": theme.git_stash_fg
+    }
     mut first := 0
     mut next := 0
     mut prev := 0
 
-    mut stat := ""
+    mut line := ""
 
-    if status[0] != 0 {
-        sg := Segment {
-            content: status[0].str()
-            space: true
-            bg: theme.git_ahead_bg
-            fg: theme.git_ahead_fg
+    keys := status.keys()
+
+    mut exists := []string
+    for st in keys {
+        if status[st] != 0 {
+            exists << st
         }
-        first = if first == 0 { sg.bg } else { first }
-        stat += sg.view()
-        next = if status[1] != 0 {
-            theme.git_staged_bg
-        } else if status[2] != 0 {
-            theme.git_unstaged_bg
-        } else if status[3] != 0{
-            theme.git_untracked_bg
-        } else {
-            sg.bg
-        }
-        prev = sg.bg
     }
 
-    if status[1] != 0 {
-
+    for i, st in exists {
         if prev != 0 {
-            stat += separator(next, prev)
+            line += separator(next, prev)
         }
         sg := Segment {
-            content: status[1].str()
+            content: status[st].str()
             space: true
-            bg: theme.git_staged_bg
-            fg: theme.git_staged_fg
+            bg: git_colors["${st}_bg"]
+            fg: git_colors["${st}_fg"]
         }
-        first = if first == 0 { sg.bg } else { first }
-        stat += sg.view()
-        next = if status[2] != 0 {
-            theme.git_unstaged_bg
-        } else if status[3] != 0 {
-            theme.git_untracked_bg
+        if first == 0 {
+            first = sg.bg
         } else {
-            sg.bg
+            first = first
+        }
+        if i < exists.len-1 {
+            n := exists[i+1]
+            next = git_colors["${n}_bg"]
+        } else {
+            next = sg.bg
         }
         prev = sg.bg
-    }
-
-    if status[2] != 0 {
-        if prev != 0 {
-            stat += separator(next, prev)
-        }
-        sg := Segment {
-            content: status[2].str()
-            space: true
-            bg: theme.git_unstaged_bg
-            fg: theme.git_unstaged_fg
-        }
-        first = if first == 0 { sg.bg } else { first }
-        stat += sg.view()
-        next = if status[3] != 0 {
-            theme.git_untracked_bg
-        } else {
-            sg.bg
-        }
-        prev = sg.bg
-    }
-
-    if status[3] != 0 {
-        if prev != 0 {
-            stat += separator(next, prev)
-        }
-        sg := Segment {
-            content: status[3].str()
-            space: true
-            bg: theme.git_untracked_bg
-            fg: theme.git_untracked_fg
-        }
-        first = if first == 0 { sg.bg } else { first }
-        stat += sg.view()
-        next = sg.bg
+        line += sg.view()
     }
 
     return Segment {
         name: "git_status"
-        content: stat
+        content: line
         bg: first
         next: next
     }
