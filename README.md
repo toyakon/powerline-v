@@ -15,9 +15,9 @@ make install
 ```
 
 ## Download binary
-1. Download to [release](https://github.com/toyakon/powerline-v/releases/tag/v1.0) or
+1. Download to [release](https://github.com/toyakon/powerline-v/releases/tag/v1.2) or
 ```
-wget https://github.com/toyakon/powerline-v/releases/download/v1.1/powerline-v
+wget https://github.com/toyakon/powerline-v/releases/download/v1.2/powerline-v
 ```
 
 2. Change Permission
