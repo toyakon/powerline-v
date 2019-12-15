@@ -3,6 +3,8 @@ nanchatte powerline.
 bash powerline for vlang.
 
 # Install
+1. install [nerd-fonts](https://github.com/ryanoasis/nerd-fonts) 
+
 ## Compile
 1. install vlang ([vlang/v](https://github.com/vlang/v))
 2. install vargparse ([toyakon/argparse-v](https://github.com/toyakon/argparse-v))

@@ -95,7 +95,7 @@ fn seg_git_status(arg Arg) Segment {
             line += separator(next, prev)
         }
         sg := Segment {
-            content: status[st].str()
+            content: status[st].str() + icons["git_$st"]
             space: true
             bg: git_colors["${st}_bg"]
             fg: git_colors["${st}_fg"]
