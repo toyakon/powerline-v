@@ -53,7 +53,7 @@ fn main() {
     powerline_format := if user_format.len != 0 {
         user_format
     } else {
-        ["user", "host", "ssh", "cwd", "git", "job"]
+        ["env", "user", "host", "ssh", "cwd", "git", "job"]
     }
 
     segment_list := {
@@ -65,6 +65,7 @@ fn main() {
         "prompt" : seg_prompt(arg)
         "git" : seg_git(arg)
         "job" : seg_job(arg)
+        "env" : seg_pipenv(arg)
     }
 
     mut powerline := []Segment
