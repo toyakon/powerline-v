@@ -1,0 +1,3 @@
+[submodule "vargparse"]
+	path = vargparse
+	url = https://github.com/toyakon/vargparse

@@ -1,7 +1,7 @@
 
 module main
 
-import toyakon.vargparse
+import vargparse
 
 const (
     prompt = "\\$"
