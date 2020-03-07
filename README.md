@@ -13,24 +13,10 @@ bash powerline for vlang.
 ```
 git clone https://github.com/toyakon/powerline-v
 cd powerline-v
+git submodule update -i
 make install
 ```
 
-## Download binary
-1. Download to [release](https://github.com/toyakon/powerline-v/releases/tag/v1.2) or
-```
-wget https://github.com/toyakon/powerline-v/releases/download/v1.2/powerline-v
-```
-
-2. Change Permission
-```
-chmod +x powerline-v
-```
-
-3. Move to a location written in PATH
-```
-mv powerline-v ~/.local/bin
-```
 # Setting
 Added to .bashrc
 ```
