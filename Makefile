@@ -2,7 +2,7 @@ NAME := powerline-v
 SRCS = $(wildcard *.v)
 
 all: $(SRCS)
-	mkdir -p bin
+	@mkdir -p bin
 	v -o bin/$(NAME) .
 
 run:
